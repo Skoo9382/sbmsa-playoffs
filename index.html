@@ -26,14 +26,14 @@ a{color:#006c72}footer{text-align:center;padding:20px;color:#54776c}.note{border
 <section id="bracket" class="panel"><h2>🏆 The Road to the Championship</h2><p class="hint">👈 👉 Swipe sideways on a phone to follow the bracket. Gold outlines show your team's possible path.</p><div class="scroll" tabindex="0" aria-label="Scrollable tournament bracket"><div id="tree" class="rounds"></div></div><p class="subtle">⭐ First-round bye: USA Screaming Eagles, Kinkaid Falcons, Brazil and Argentina FC. Each winner moves to the next connected round.</p></section>
 <section id="games" class="panel hidden"><h2>📅 Game Schedule</h2><div id="fixtures" class="cards"></div></section>
 <section id="teams" class="panel hidden"><h2>🎽 All 12 Teams</h2><div id="teamlist" class="teams"></div></section>
-<section class="panel"><h2>📍 Before you head to the field</h2><p>Always confirm the latest time, field, and scores with the <a href="https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs" target="_blank" rel="noopener">official SBMSA schedule</a>.</p><p class="note"><strong>Unofficial fan site.</strong> This bracket shows scheduled matchups and advancement, not live scores. SBMSA changes are monitored but require verification before appearing here.</p></section>
+<section class="panel"><h2>📍 Before you head to the field</h2><p>Always confirm the latest time, field, and scores with the <a href="https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs" target="_blank" rel="noopener">official SBMSA schedule</a>.</p><p class="note"><strong>Unofficial fan site.</strong> This bracket shows scheduled matchups and advancement, not live scores. Regular-season records will appear once verified. SBMSA changes are monitored but require verification before appearing here.</p></section>
 </main><footer>⚽ Have fun, play fair, cheer loud! 💚</footer>
 <script>
 const teams=[
 ['USA Screaming Eagles','🦅'],['Kinkaid Falcons','🦅'],['Brazil','🇧🇷'],['Argentina FC','🇦🇷'],
 ['Rams','🐏'],['BHE Lions','🦁'],['Regis Knights','⚔️'],['Seattle Sounders FC','💚'],
 ['Tigers','🐯'],['Space City Strikers','🚀'],['Green Machine','🌿'],['Holland Hooligans','🧡']];
-const games=[
+const records={}; // Fill with verified regular-season W-L-T records only.\nfunction displayTeam(name){const clean=name.replace(/^⭐ /,'');return name+(records[clean]?' <span class="tag">'+records[clean]+'</span>':'')}\nconst games=[
 {id:1,round:0,date:'Oct 31',time:'8:30 AM',a:'Rams',b:'BHE Lions',next:5,field:'PSE Field #4'},
 {id:2,round:0,date:'Oct 31',time:'9:45 AM',a:'Regis Knights',b:'Seattle Sounders FC',next:6,field:'PSE Field #4'},
 {id:3,round:0,date:'Oct 31',time:'11:00 AM',a:'Tigers',b:'Space City Strikers',next:7,field:'PSE Field #4'},
@@ -48,10 +48,10 @@ const games=[
 const selected=document.getElementById('team');
 teams.forEach(([name])=>{let option=document.createElement('option');option.value=name;option.textContent=name;selected.appendChild(option)});
 function pathFor(team){if(!team)return [];let g=games.find(x=>x.round===0&&(x.a===team||x.b===team))||games.find(x=>x.round===1&&x.a.includes(team));let ids=[];while(g){ids.push(g.id);g=games.find(x=>x.id===g.next)}return ids}
-function gameHTML(g,focus,path){let match=path.includes(g.id);let cls=focus?(match?'highlight':'dim'):'';return '<article class="game '+cls+(g.id===11?' champ':'')+'"><div class="number">GAME '+g.id+(g.id===11?' 🏆':'')+'</div><div class="time">'+g.date+' • '+g.time+'</div><div class="sides">'+g.a+' <span class="versus">VS</span> '+g.b+'</div><div class="next">'+(g.next?'Winner → Game '+g.next:'🏆 Championship')+'</div></article>'}
+function gameHTML(g,focus,path){let match=path.includes(g.id);let cls=focus?(match?'highlight':'dim'):'';return '<article class="game '+cls+(g.id===11?' champ':'')+'"><div class="number">GAME '+g.id+(g.id===11?' 🏆':'')+'</div><div class="time">'+g.date+' • '+g.time+'</div><div class="sides">'+displayTeam(g.a)+' <span class="versus">VS</span> '+displayTeam(g.b)+'</div><div class="next">'+(g.next?'Winner → Game '+g.next:'🏆 Championship')+'</div></article>'}
 function render(){const focus=selected.value;const path=pathFor(focus);const titles=['Round 1 • Oct 31','Quarterfinals • Nov 3–5','Semifinals • Nov 10','Championship • Nov 14'];document.getElementById('tree').innerHTML=titles.map((t,r)=>'<div class="round"><h3>'+t+'</h3>'+games.filter(g=>g.round===r).map(g=>gameHTML(g,focus,path)).join('')+'</div>').join('');
-document.getElementById('fixtures').innerHTML=games.filter(g=>!focus||path.includes(g.id)).map(g=>'<div class="fixture"><span class="tag">GAME '+g.id+' • '+g.date+' • '+g.time+'</span><strong>'+g.a+' vs '+g.b+'</strong><div class="subtle">📍 '+g.field+'</div><div class="subtle">'+(g.next?'Winner advances to Game '+g.next:'🏆 Championship')+'</div></div>').join('');
-document.getElementById('teamlist').innerHTML=teams.filter(t=>!focus||t[0]===focus).map(t=>'<div class="team">'+t[1]+' '+t[0]+(games.some(g=>g.round===1&&g.a.includes(t[0]))?' <span class="tag">First-round bye ⭐</span>':'')+'</div>').join('')}
+document.getElementById('fixtures').innerHTML=games.filter(g=>!focus||path.includes(g.id)).map(g=>'<div class="fixture"><span class="tag">GAME '+g.id+' • '+g.date+' • '+g.time+'</span><strong>'+displayTeam(g.a)+' vs '+displayTeam(g.b)+'</strong><div class="subtle">📍 '+g.field+'</div><div class="subtle">'+(g.next?'Winner advances to Game '+g.next:'🏆 Championship')+'</div></div>').join('');
+document.getElementById('teamlist').innerHTML=teams.filter(t=>!focus||t[0]===focus).map(t=>'<div class="team">'+t[1]+' '+displayTeam(t[0])+(games.some(g=>g.round===1&&g.a.includes(t[0]))?' <span class="tag">First-round bye ⭐</span>':'')+'</div>').join('')}
 function switchTab(tab){for(const id of ['bracket','games','teams']){document.getElementById(id).classList.toggle('hidden',id!==tab);document.getElementById('tab-'+id).classList.toggle('active',id===tab)}}
 const remaining=new Date('2026-11-14T13:30:00-06:00')-Date.now();document.getElementById('countdown').textContent=remaining>0?'⏳ '+Math.ceil(remaining/86400000)+' days until the championship!':'🏆 Championship day has arrived or passed.';
 render();
