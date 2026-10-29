@@ -1,0 +1,61 @@
+{
+  "games": {
+    "1": {
+      "date": "Sat 10/31",
+      "time": "8:30 AM",
+      "field": "PSE Field #4"
+    },
+    "2": {
+      "date": "Sat 10/31",
+      "time": "9:45 AM",
+      "field": "PSE Field #4"
+    },
+    "3": {
+      "date": "Sat 10/31",
+      "time": "11:00 AM",
+      "field": "PSE Field #4"
+    },
+    "4": {
+      "date": "Sat 10/31",
+      "time": "12:15 PM",
+      "field": "PSE Field #4"
+    },
+    "5": {
+      "date": "Tue 11/3",
+      "time": "5:30 PM",
+      "field": "PSE Field #4"
+    },
+    "6": {
+      "date": "Tue 11/3",
+      "time": "6:45 PM",
+      "field": "PSE Field #4"
+    },
+    "7": {
+      "date": "Thu 11/5",
+      "time": "5:30 PM",
+      "field": "PSE Field #4"
+    },
+    "8": {
+      "date": "Thu 11/5",
+      "time": "6:45 PM",
+      "field": "PSE Field #4"
+    },
+    "9": {
+      "date": "Tue 11/10",
+      "time": "5:30 PM",
+      "field": "PSE Field #4"
+    },
+    "10": {
+      "date": "Tue 11/10",
+      "time": "6:45 PM",
+      "field": "PSE Field #4"
+    },
+    "11": {
+      "date": "Sat 11/14",
+      "time": "1:30 PM",
+      "field": "SBEC 6U Field"
+    }
+  },
+  "checked_at": "2026-10-29T18:01:56.229613+00:00",
+  "source": "https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs"
+}
