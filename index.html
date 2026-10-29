@@ -26,14 +26,14 @@ a{color:#006c72}footer{text-align:center;padding:20px;color:#54776c}.note{border
 <section id="bracket" class="panel"><h2>🏆 The Road to the Championship</h2><p class="hint">👈 👉 Swipe sideways on a phone to follow the bracket. Gold outlines show your team's possible path.</p><div class="scroll" tabindex="0" aria-label="Scrollable tournament bracket"><div id="tree" class="rounds"></div></div><p class="subtle">⭐ First-round bye: USA Screaming Eagles, Kinkaid Falcons, Brazil and Argentina FC. Each winner moves to the next connected round.</p></section>
 <section id="games" class="panel hidden"><h2>📅 Game Schedule</h2><div id="fixtures" class="cards"></div></section>
 <section id="teams" class="panel hidden"><h2>🎽 All 12 Teams</h2><div id="teamlist" class="teams"></div></section>
-<section class="panel"><h2>📍 Before you head to the field</h2><p>Always confirm the latest time, field, and scores with the <a href="https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs" target="_blank" rel="noopener">official SBMSA schedule</a>.</p><p class="note"><strong>Unofficial fan site.</strong> This bracket shows scheduled matchups and advancement, not live scores. Regular-season records will appear once verified. SBMSA changes are monitored but require verification before appearing here.</p></section>
+<section class="panel"><h2>📍 Before you head to the field</h2><p>Always confirm the latest time, field, and scores with the <a href="https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs" target="_blank" rel="noopener">official SBMSA schedule</a>.</p><p class="note"><strong>Unofficial fan site.</strong> This bracket shows scheduled matchups and advancement, not live scores. Regular-season records (W-L-T) are sourced from the official Haaland, Messi and Mbappé division standings. SBMSA changes are monitored but require verification before appearing here.</p></section>
 </main><footer>⚽ Have fun, play fair, cheer loud! 💚</footer>
 <script>
 const teams=[
 ['USA Screaming Eagles','🦅'],['Kinkaid Falcons','🦅'],['Brazil','🇧🇷'],['Argentina FC','🇦🇷'],
 ['Rams','🐏'],['BHE Lions','🦁'],['Regis Knights','⚔️'],['Seattle Sounders FC','💚'],
 ['Tigers','🐯'],['Space City Strikers','🚀'],['Green Machine','🌿'],['Holland Hooligans','🧡']];
-const records={}; // Fill with verified regular-season W-L-T records only.\nfunction displayTeam(name){const clean=name.replace(/^⭐ /,'');return name+(records[clean]?' <span class="tag">'+records[clean]+'</span>':'')}\nconst games=[
+const records={"USA Screaming Eagles":"5-2-4","Kinkaid Falcons":"5-2-4","Brazil":"5-3-3","Argentina FC":"4-3-4","Rams":"5-5-1","BHE Lions":"4-5-2","Regis Knights":"5-4-2","Seattle Sounders FC":"3-6-2","Tigers":"5-4-2","Space City Strikers":"3-5-3","Green Machine":"5-4-2","Holland Hooligans":"3-5-3"}; // Verified from SBMSA Haaland, Messi and Mbappé standings.\nfunction displayTeam(name){const clean=name.replace(/^⭐ /,'');return name+(records[clean]?' <span class="tag">'+records[clean]+'</span>':'')}\nconst games=[
 {id:1,round:0,date:'Oct 31',time:'8:30 AM',a:'Rams',b:'BHE Lions',next:5,field:'PSE Field #4'},
 {id:2,round:0,date:'Oct 31',time:'9:45 AM',a:'Regis Knights',b:'Seattle Sounders FC',next:6,field:'PSE Field #4'},
 {id:3,round:0,date:'Oct 31',time:'11:00 AM',a:'Tigers',b:'Space City Strikers',next:7,field:'PSE Field #4'},
