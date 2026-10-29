@@ -1,0 +1,38 @@
+name: Check SBMSA schedule
+on:
+  schedule:
+    - cron: '0 5 * * *'
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run only at midnight Houston time
+        id: midnight
+        run: |
+          if [ "$(TZ=America/Chicago date +%H)" = "00" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Check SBMSA
+        if: steps.midnight.outputs.run == 'true'
+        id: source
+        run: python scripts/check_schedule.py
+      - name: Save source fingerprint
+        if: steps.midnight.outputs.run == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/source-monitor.json
+          git diff --cached --quiet || (git commit -m 'Track SBMSA source revision' && git push)
+      - name: Flag source changes
+        if: steps.source.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --title "SBMSA schedule changed — review required" --body "The official SBMSA page changed: https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs . Verify matchups and scores before editing the public site." || true
