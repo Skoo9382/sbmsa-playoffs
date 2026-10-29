@@ -1,38 +1,43 @@
-name: Check SBMSA schedule
+name: Sync SBMSA playoffs
 on:
   schedule:
-    - cron: '0 5 * * *'
-    - cron: '0 6 * * *'
+    - cron: '17,47 * * * *'
   workflow_dispatch:
 permissions:
   contents: write
   issues: write
+concurrency:
+  group: sbmsa-sync
+  cancel-in-progress: false
 jobs:
-  check:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Run only at midnight Houston time
-        id: midnight
-        run: |
-          if [ "$(TZ=America/Chicago date +%H)" = "00" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; fi
-      - name: Check SBMSA
-        if: steps.midnight.outputs.run == 'true'
-        id: source
-        run: python scripts/check_schedule.py
-      - name: Save source fingerprint
-        if: steps.midnight.outputs.run == 'true'
+      - run: python -m pip install beautifulsoup4
+      - name: Sync verified official fixtures
+        id: sync
+        continue-on-error: true
+        run: python scripts/sync_playoffs.py
+      - name: Commit verified updates
+        if: steps.sync.outcome == 'success'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/source-monitor.json
-          git diff --cached --quiet || (git commit -m 'Track SBMSA source revision' && git push)
-      - name: Flag source changes
-        if: steps.source.outputs.changed == 'true'
+          git add data/playoffs.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Sync official SBMSA fixtures"
+            git pull --rebase
+            git push
+          fi
+      - name: Flag sync failures
+        if: steps.sync.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue create --title "SBMSA schedule changed — review required" --body "The official SBMSA page changed: https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs . Verify matchups and scores before editing the public site." || true
+          gh issue create --title "SBMSA sync needs review" --body "Automatic parsing could not safely confirm the current official fixtures. The website retains the last verified information. Review https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs ." || true
