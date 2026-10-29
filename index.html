@@ -33,7 +33,9 @@ const teams=[
 ['USA Screaming Eagles','🦅'],['Kinkaid Falcons','🦅'],['Brazil','🇧🇷'],['Argentina FC','🇦🇷'],
 ['Rams','🐏'],['BHE Lions','🦁'],['Regis Knights','⚔️'],['Seattle Sounders FC','💚'],
 ['Tigers','🐯'],['Space City Strikers','🚀'],['Green Machine','🌿'],['Holland Hooligans','🧡']];
-const records={"USA Screaming Eagles":"5-2-4","Kinkaid Falcons":"5-2-4","Brazil":"5-3-3","Argentina FC":"4-3-4","Rams":"5-5-1","BHE Lions":"4-5-2","Regis Knights":"5-4-2","Seattle Sounders FC":"3-6-2","Tigers":"5-4-2","Space City Strikers":"3-5-3","Green Machine":"5-4-2","Holland Hooligans":"3-5-3"}; // Verified from SBMSA Haaland, Messi and Mbappé standings.\nfunction displayTeam(name){const clean=name.replace(/^⭐ /,'');return name+(records[clean]?' <span class="tag">'+records[clean]+'</span>':'')}\nconst games=[
+const records={"USA Screaming Eagles":"5-2-4","Kinkaid Falcons":"5-2-4","Brazil":"5-3-3","Argentina FC":"4-3-4","Rams":"5-5-1","BHE Lions":"4-5-2","Regis Knights":"5-4-2","Seattle Sounders FC":"3-6-2","Tigers":"5-4-2","Space City Strikers":"3-5-3","Green Machine":"5-4-2","Holland Hooligans":"3-5-3"}; // Verified from SBMSA Haaland, Messi and Mbappé standings.
+function displayTeam(name){const clean=name.replace(/^⭐ /,'');return name+(records[clean]?' <span class="tag">'+records[clean]+'</span>':'')}
+const games=[
 {id:1,round:0,date:'Oct 31',time:'8:30 AM',a:'Rams',b:'BHE Lions',next:5,field:'PSE Field #4'},
 {id:2,round:0,date:'Oct 31',time:'9:45 AM',a:'Regis Knights',b:'Seattle Sounders FC',next:6,field:'PSE Field #4'},
 {id:3,round:0,date:'Oct 31',time:'11:00 AM',a:'Tigers',b:'Space City Strikers',next:7,field:'PSE Field #4'},
