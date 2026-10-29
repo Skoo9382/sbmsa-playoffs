@@ -17,7 +17,7 @@ main{max-width:1200px;margin:auto;padding:18px}.hero{background:#fff4c8;border:3
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:12px}.fixture{border:2px solid #dcece4;border-radius:15px;padding:15px;background:white}.fixture strong{display:block;font-size:1.05rem}.tag{display:inline-block;background:#e4f5e9;border-radius:8px;padding:3px 8px;font-size:.78rem;font-weight:800}.teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px}.team{background:#f5fbf7;border-radius:14px;padding:12px;font-weight:700}
 a{color:#006c72}footer{text-align:center;padding:20px;color:#54776c}.note{border-left:4px solid var(--orange);padding:10px 14px;background:#fff8ef;border-radius:8px}
 @media(max-width:600px){main{padding:12px}.rounds{gap:20px}.panel{padding:12px}.controls{align-items:stretch}.controls button{flex:1}.rounds{padding-left:5px}}
-</style></head><body>
+.calendar-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.calendar-links a{font-size:.75rem;font-weight:700;background:#e8f5ee;border:1px solid #b8ddcc;border-radius:8px;padding:5px 8px;text-decoration:none}</style></head><body>
 <header><div style="font-size:2.7rem">⚽ 🥅 🏆</div><h1>Silver Playoffs!</h1><p>SBMSA • 6U Boys • Fall 2026</p><strong>Every team has a shot at the trophy!</strong></header>
 <main>
 <section class="hero"><div style="font-size:2rem">🏆</div><h2>Championship Day</h2><h2>Saturday, November 14, 2026</h2><strong>1:30 PM • SBEC 6U Field</strong><p id="countdown" class="subtle"></p></section>
@@ -56,9 +56,26 @@ async function loadUpdates(){try{const r=await fetch('./data/playoffs.json?t='+M
 teams.forEach(([name])=>{let option=document.createElement('option');option.value=name;option.textContent=name;selected.appendChild(option)});
 function pathFor(team){if(!team)return [];let g=games.find(x=>x.round===0&&(x.a===team||x.b===team))||games.find(x=>x.round===1&&x.a.includes(team));let ids=[];while(g){ids.push(g.id);g=games.find(x=>x.id===g.next)}return ids}
 function locationLink(g){const url=g.id===11?'https://www.google.com/maps/search/?api=1&query=9000%20Westview%20Dr%2C%20Houston%2C%20TX%2077055':'https://www.google.com/maps/search/?api=1&query=9900%20Neuens%20Rd%2C%20Houston%2C%20TX%2077080';return '<div class="time">📍 '+g.field+' · <a href="'+url+'" target="_blank" rel="noopener noreferrer">Directions ↗</a></div>'}
-function gameHTML(g,focus,path){let match=path.includes(g.id);let cls=focus?(match?'highlight':'dim'):'';return '<article class="game '+cls+(g.id===11?' champ':'')+'"><div class="number">GAME '+g.id+(g.id===11?' 🏆':'')+'</div><div class="time">'+g.date+' • '+g.time+'</div><div class="sides">'+displayTeam(resolved(g.a))+' <span class="versus">VS</span> '+displayTeam(resolved(g.b))+'</div>'+locationLink(g)+gameScore(g)+'<div class="next">'+(g.next?'Winner → Game '+g.next:'🏆 Championship')+'</div></article>'}
+
+function calendarLinks(g){
+ const match=g.date.match(/(Oct|Nov)\s+(\d+)/), tm=g.time.match(/(\d+):(\d+)\s*(AM|PM)/i);
+ if(!match||!tm)return '';
+ const month=match[1]==='Oct'?'10':'11', day=match[2].padStart(2,'0');
+ const hour=(Number(tm[1])%12)+(tm[3].toUpperCase()==='PM'?12:0);
+ const start=new Date('2026-'+month+'-'+day+'T'+String(hour).padStart(2,'0')+':'+tm[2]+':00'+(month==='10'?'-05:00':'-06:00'));
+ if(isNaN(start.getTime()))return '';
+ const end=new Date(start.getTime()+75*60000),utc=d=>d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
+ const venue=g.id===11?'SBEC 6U Field, 9000 Westview Dr, Houston, TX 77055':'PSE Field #4, 9900 Neuens Rd, Houston, TX 77080';
+ const title='SBMSA 6U Silver G'+g.id+': '+resolved(g.a).replace('⭐ ','')+' vs '+resolved(g.b).replace('⭐ ','');
+ const description='75-minute planning slot, not official duration. Confirm changes at https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs';
+ const google='https://calendar.google.com/calendar/render?'+new URLSearchParams({action:'TEMPLATE',text:title,dates:utc(start)+'/'+utc(end),details:description,location:venue,ctz:'America/Chicago'}).toString();
+ const esc=s=>s.replaceAll('\\','\\\\').replaceAll(',','\\,').replaceAll(';','\\;');
+ const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//SBMSA Fan Bracket//EN','BEGIN:VEVENT','UID:sbmsa-2026-silver-game-'+g.id+'@sbmsa-playoffs.pages.dev','DTSTAMP:'+utc(start),'DTSTART:'+utc(start),'DTEND:'+utc(end),'SUMMARY:'+esc(title),'LOCATION:'+esc(venue),'DESCRIPTION:'+esc(description),'END:VEVENT','END:VCALENDAR'].join('\r\n');
+ return '<div class="calendar-links"><a target="_blank" rel="noopener noreferrer" href="'+google.replaceAll('&','&amp;')+'">📅 Google Calendar</a><a download="SBMSA-Game-'+g.id+'.ics" href="data:text/calendar;charset=utf-8,'+encodeURIComponent(ics)+'">🍎 Apple / Outlook</a></div>';
+}
+function gameHTML(g,focus,path){let match=path.includes(g.id);let cls=focus?(match?'highlight':'dim'):'';return '<article class="game '+cls+(g.id===11?' champ':'')+'"><div class="number">GAME '+g.id+(g.id===11?' 🏆':'')+'</div><div class="time">'+g.date+' • '+g.time+'</div><div class="sides">'+displayTeam(resolved(g.a))+' <span class="versus">VS</span> '+displayTeam(resolved(g.b))+'</div>'+locationLink(g)+calendarLinks(g)+gameScore(g)+'<div class="next">'+(g.next?'Winner → Game '+g.next:'🏆 Championship')+'</div></article>'}
 function render(){const focus=selected.value;const path=pathFor(focus);const titles=['Round 1 • Oct 31','Quarterfinals • Nov 3–5','Semifinals • Nov 10','Championship • Nov 14'];document.getElementById('tree').innerHTML=titles.map((t,r)=>'<div class="round"><h3>'+t+'</h3>'+games.filter(g=>g.round===r).map(g=>gameHTML(g,focus,path)).join('')+'</div>').join('');
-document.getElementById('fixtures').innerHTML=games.filter(g=>!focus||path.includes(g.id)).map(g=>'<div class="fixture"><span class="tag">GAME '+g.id+' • '+g.date+' • '+g.time+'</span><strong>'+displayTeam(resolved(g.a))+' vs '+displayTeam(resolved(g.b))+'</strong>'+gameScore(g) +locationLink(g)+'<div class="subtle">'+(g.next?'Winner advances to Game '+g.next:'🏆 Championship')+'</div></div>').join('');
+document.getElementById('fixtures').innerHTML=games.filter(g=>!focus||path.includes(g.id)).map(g=>'<div class="fixture"><span class="tag">GAME '+g.id+' • '+g.date+' • '+g.time+'</span><strong>'+displayTeam(resolved(g.a))+' vs '+displayTeam(resolved(g.b))+'</strong>'+gameScore(g) +locationLink(g)+calendarLinks(g)+'<div class="subtle">'+(g.next?'Winner advances to Game '+g.next:'🏆 Championship')+'</div></div>').join('');
 document.getElementById('teamlist').innerHTML=teams.filter(t=>!focus||t[0]===focus).map(t=>'<div class="team">'+t[1]+' '+displayTeam(t[0])+(games.some(g=>g.round===1&&g.a.includes(t[0]))?' <span class="tag">First-round bye ⭐</span>':'')+'</div>').join('')}
 function switchTab(tab){for(const id of ['bracket','games','teams']){document.getElementById(id).classList.toggle('hidden',id!==tab);document.getElementById('tab-'+id).classList.toggle('active',id===tab)}}
 const remaining=new Date('2026-11-14T13:30:00-06:00')-Date.now();document.getElementById('countdown').textContent=remaining>0?'⏳ '+Math.ceil(remaining/86400000)+' days until the championship!':'🏆 Championship day has arrived or passed.';
