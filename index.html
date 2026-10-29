@@ -48,13 +48,19 @@ const games=[
 {id:10,round:2,date:'Nov 10',time:'6:45 PM',a:'Winner G7',b:'Winner G8',next:11,field:'See SBMSA'},
 {id:11,round:3,date:'Nov 14',time:'1:30 PM',a:'Winner G9',b:'Winner G10',next:null,field:'SBEC 6U Field'}];
 const selected=document.getElementById('team');
+let synced={};
+function resolved(label){const m=label.match(/^Winner G(\d+)$/);if(!m)return label;return synced[m[1]]?.winner||label}
+function gameScore(g){const d=synced[g.id];return d?.score?.length===2?' <span class="tag">Score: '+d.score[0]+'–'+d.score[1]+'</span>':''}
+async function loadUpdates(){try{const r=await fetch('./data/playoffs.json?t='+Math.floor(Date.now()/1800000),{cache:'no-store'});if(!r.ok)return;const d=await r.json();synced=d.games||{};for(const g of games){const x=synced[g.id];if(!x)continue;if(x.time)g.time=x.time;if(x.field)g.field=x.field;if(x.date)g.date=x.date.replace(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+/,'')}render()}catch(e){console.warn('Keeping published bracket',e)}}
+
 teams.forEach(([name])=>{let option=document.createElement('option');option.value=name;option.textContent=name;selected.appendChild(option)});
 function pathFor(team){if(!team)return [];let g=games.find(x=>x.round===0&&(x.a===team||x.b===team))||games.find(x=>x.round===1&&x.a.includes(team));let ids=[];while(g){ids.push(g.id);g=games.find(x=>x.id===g.next)}return ids}
-function gameHTML(g,focus,path){let match=path.includes(g.id);let cls=focus?(match?'highlight':'dim'):'';return '<article class="game '+cls+(g.id===11?' champ':'')+'"><div class="number">GAME '+g.id+(g.id===11?' 🏆':'')+'</div><div class="time">'+g.date+' • '+g.time+'</div><div class="sides">'+displayTeam(g.a)+' <span class="versus">VS</span> '+displayTeam(g.b)+'</div><div class="next">'+(g.next?'Winner → Game '+g.next:'🏆 Championship')+'</div></article>'}
+function gameHTML(g,focus,path){let match=path.includes(g.id);let cls=focus?(match?'highlight':'dim'):'';return '<article class="game '+cls+(g.id===11?' champ':'')+'"><div class="number">GAME '+g.id+(g.id===11?' 🏆':'')+'</div><div class="time">'+g.date+' • '+g.time+'</div><div class="sides">'+displayTeam(resolved(g.a))+' <span class="versus">VS</span> '+displayTeam(resolved(g.b))+'</div>'+gameScore(g)+'<div class="next">'+(g.next?'Winner → Game '+g.next:'🏆 Championship')+'</div></article>'}
 function render(){const focus=selected.value;const path=pathFor(focus);const titles=['Round 1 • Oct 31','Quarterfinals • Nov 3–5','Semifinals • Nov 10','Championship • Nov 14'];document.getElementById('tree').innerHTML=titles.map((t,r)=>'<div class="round"><h3>'+t+'</h3>'+games.filter(g=>g.round===r).map(g=>gameHTML(g,focus,path)).join('')+'</div>').join('');
-document.getElementById('fixtures').innerHTML=games.filter(g=>!focus||path.includes(g.id)).map(g=>'<div class="fixture"><span class="tag">GAME '+g.id+' • '+g.date+' • '+g.time+'</span><strong>'+displayTeam(g.a)+' vs '+displayTeam(g.b)+'</strong><div class="subtle">📍 '+g.field+'</div><div class="subtle">'+(g.next?'Winner advances to Game '+g.next:'🏆 Championship')+'</div></div>').join('');
+document.getElementById('fixtures').innerHTML=games.filter(g=>!focus||path.includes(g.id)).map(g=>'<div class="fixture"><span class="tag">GAME '+g.id+' • '+g.date+' • '+g.time+'</span><strong>'+displayTeam(resolved(g.a))+' vs '+displayTeam(resolved(g.b))+'</strong>'+gameScore(g)+'<div class="subtle">📍 '+g.field+'</div><div class="subtle">'+(g.next?'Winner advances to Game '+g.next:'🏆 Championship')+'</div></div>').join('');
 document.getElementById('teamlist').innerHTML=teams.filter(t=>!focus||t[0]===focus).map(t=>'<div class="team">'+t[1]+' '+displayTeam(t[0])+(games.some(g=>g.round===1&&g.a.includes(t[0]))?' <span class="tag">First-round bye ⭐</span>':'')+'</div>').join('')}
 function switchTab(tab){for(const id of ['bracket','games','teams']){document.getElementById(id).classList.toggle('hidden',id!==tab);document.getElementById('tab-'+id).classList.toggle('active',id===tab)}}
 const remaining=new Date('2026-11-14T13:30:00-06:00')-Date.now();document.getElementById('countdown').textContent=remaining>0?'⏳ '+Math.ceil(remaining/86400000)+' days until the championship!':'🏆 Championship day has arrived or passed.';
 render();
+loadUpdates();
 </script></body></html>
