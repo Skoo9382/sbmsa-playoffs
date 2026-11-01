@@ -3,22 +3,46 @@
     "1": {
       "date": "Sat 10/31",
       "time": "8:30 AM",
-      "field": "PSE Field #4"
+      "field": "PSE Field #4",
+      "score": [
+        3,
+        2
+      ],
+      "winner": "Rams",
+      "shootout": true
     },
     "2": {
       "date": "Sat 10/31",
       "time": "9:45 AM",
-      "field": "PSE Field #4"
+      "field": "PSE Field #4",
+      "score": [
+        2,
+        1
+      ],
+      "winner": "Regis Knights",
+      "shootout": true
     },
     "3": {
       "date": "Sat 10/31",
       "time": "11:00 AM",
-      "field": "PSE Field #4"
+      "field": "PSE Field #4",
+      "score": [
+        2,
+        1
+      ],
+      "winner": "Tigers",
+      "shootout": true
     },
     "4": {
       "date": "Sat 10/31",
       "time": "12:15 PM",
-      "field": "PSE Field #4"
+      "field": "PSE Field #4",
+      "score": [
+        5,
+        2
+      ],
+      "winner": "Green Machine",
+      "shootout": false
     },
     "5": {
       "date": "Tue 11/3",
@@ -56,6 +80,6 @@
       "field": "SBEC 6U Field"
     }
   },
-  "checked_at": "2026-10-31T18:17:39.544199+00:00",
+  "checked_at": "2026-11-01T13:22:00Z",
   "source": "https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs"
 }
