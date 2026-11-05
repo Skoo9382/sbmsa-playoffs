@@ -42,7 +42,7 @@ for tr in grid.select("tr"):
     # Later rounds can show resolved winners instead of placeholders.
     def expected_name(label):
         m=re.fullmatch(r"G(\\d+) Winner",label)
-        return existing["games"].get(m.group(1),{}).get("winner",label) if m else label
+        return updates.get(m.group(1),{}).get("winner") or existing["games"].get(m.group(1),{}).get("winner") or label if m else label
     if home!=expected_name(expected[0]) or away!=expected_name(expected[1]):
         raise RuntimeError(f"Unexpected participants in G{num}: {home} vs {away}")
     item={"date":labels[0],"time":labels[1],"field":labels[5]}
