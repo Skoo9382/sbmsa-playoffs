@@ -13,38 +13,46 @@ soup=BeautifulSoup(html,"html.parser")
 known={1:("Rams","BHE Lions"),2:("Regis Knights","Seattle Sounders FC"),3:("Tigers","Space City Strikers"),4:("Green Machine","Holland Hooligans"),5:("USA Screaming Eagles","G1 Winner"),6:("Kinkaid Falcons","G2 Winner"),7:("Brazil","G3 Winner"),8:("Argentina FC","G4 Winner"),9:("G5 Winner","G6 Winner"),10:("G7 Winner","G8 Winner"),11:("G9 Winner","G10 Winner")}
 existing=json.loads(DEST.read_text()) if DEST.exists() else {"games":{}}
 updates={}
-# Require an identifiable row and both expected participants; never accept dates or field numbers as scores.
-for tr in soup.select("tr"):
-    cells=[" ".join(x.stripped_strings) for x in tr.find_all(["td","th"],recursive=False)]
-    if len(cells)<5: continue
-    hits=[(i,int(m.group(1))) for i,c in enumerate(cells) if (m:=re.fullmatch(r"G(1[01]|[1-9])",c,re.I))]
-    if len(hits)!=1: continue
-    pos,num=hits[0]
-    a,b=known[num]
-    row=" | ".join(cells)
-    if a.lower() not in row.lower() or b.lower() not in row.lower(): continue
-    # Only read scores if the table explicitly labels score columns. No guessing.
-    headers=[x.get_text(" ",strip=True).lower() for x in tr.find_parent("table").select("thead th")]
-    scores=None
-    if len(headers)==len(cells):
-        home_idx=next((i for i,x in enumerate(headers) if x in ("home score","home goals")),None)
-        away_idx=next((i for i,x in enumerate(headers) if x in ("away score","away goals")),None)
-        if home_idx is not None and away_idx is not None:
-            sh,sa=cells[home_idx],cells[away_idx]
-            if re.fullmatch(r"\d{1,2}",sh) and re.fullmatch(r"\d{1,2}",sa):
-                scores=[int(sh),int(sa)]
-    # Capture explicit date/time and field only from table cells, no fabricated replacements.
-    date=next((c for c in cells if re.search(r"\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+\d{1,2}/\d{1,2}\b",c)),None)
-    time=next((c for c in cells if re.fullmatch(r"\d{1,2}:\d{2}\s*[AP]M",c,re.I)),None)
-    field=next((c for c in cells if "Field" in c),None)
-    item={}
-    if date:item["date"]=date
-    if time:item["time"]=time
-    if field:item["field"]=field
-    if scores is not None:
-        item["score"]=scores
-        if scores[0]!=scores[1]: item["winner"]=a if scores[0]>scores[1] else b
-    if item: updates[str(num)]=item
+# The official playoff grid uses a six-column table. Team cells contain
+# separate left/right <p> elements for name and score, not score headers.
+grid=soup.select_one('table[id$="PlayoffGrid_ctl00"]')
+if grid is None:
+    raise RuntimeError("Official playoff schedule grid not found")
+for tr in grid.select("tr"):
+    cells=tr.find_all("td",recursive=False)
+    if len(cells)!=6: continue
+    labels=[c.get_text(" ",strip=True) for c in cells]
+    match=re.fullmatch(r"G(1[01]|[1-9])",labels[2],re.I)
+    if not match: continue
+    num=int(match.group(1))
+    if num in updates: raise RuntimeError(f"Duplicate official game G{num}")
+    if not re.fullmatch(r"(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\\s+\\d{1,2}/\\d{1,2}",labels[0]): continue
+    if not re.fullmatch(r"\\d{1,2}:\\d{2}\\s*[AP]M",labels[1],re.I): continue
+    if "Field" not in labels[5]: continue
+    def team_and_score(cell):
+        pieces=[p.get_text(" ",strip=True) for p in cell.find_all("p",recursive=False)]
+        if pieces:
+            name=pieces[0]
+            score=int(pieces[1]) if len(pieces)>1 and re.fullmatch(r"\\d{1,2}",pieces[1]) else None
+            return name,score
+        return cell.get_text(" ",strip=True),None
+    home,hs=team_and_score(cells[3])
+    away,aw=team_and_score(cells[4])
+    expected=known[num]
+    # Later rounds can show resolved winners instead of placeholders.
+    def expected_name(label):
+        m=re.fullmatch(r"G(\\d+) Winner",label)
+        return existing["games"].get(m.group(1),{}).get("winner",label) if m else label
+    if home!=expected_name(expected[0]) or away!=expected_name(expected[1]):
+        raise RuntimeError(f"Unexpected participants in G{num}: {home} vs {away}")
+    item={"date":labels[0],"time":labels[1],"field":labels[5]}
+    if hs is not None and aw is not None:
+        item["score"]=[hs,aw]
+        if hs!=aw:
+            item["winner"]=home if hs>aw else away
+        # A shootout can produce a final non-tied result, but the official
+        # site must be checked if tied scores are displayed.
+    updates[str(num)]=item
 if len(updates)<8:
     raise RuntimeError(f"Only {len(updates)} matching fixtures parsed; preserving previous published data")
 # Avoid overwriting existing confirmed results with blanks.
