@@ -311,5 +311,18 @@
       }
     ]
   },
-  "regular_season_records": {}
+  "regular_season_records": {
+    "Celtics": "11-0-0",
+    "Bulls FC": "8-1-2",
+    "Liverpool": "8-2-1",
+    "Red Fury": "6-2-3",
+    "England Lions": "9-2-0",
+    "Cannonballs": "7-1-3",
+    "Green Army": "9-0-2",
+    "Vipers": "6-4-1",
+    "Speedy Yetis": "9-2-0",
+    "New York Knights": "8-3-0",
+    "Bayern Eagles": "9-1-1",
+    "Barcelona": "8-2-1"
+  }
 }
