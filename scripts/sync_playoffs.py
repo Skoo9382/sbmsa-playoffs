@@ -26,14 +26,14 @@ for tr in grid.select("tr"):
     if not match: continue
     num=int(match.group(1))
     if num in updates: raise RuntimeError(f"Duplicate official game G{num}")
-    if not re.fullmatch(r"(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\\s+\\d{1,2}/\\d{1,2}",labels[0]): continue
-    if not re.fullmatch(r"\\d{1,2}:\\d{2}\\s*[AP]M",labels[1],re.I): continue
+    if not re.fullmatch(r"(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+\d{1,2}/\d{1,2}",labels[0]): continue
+    if not re.fullmatch(r"\d{1,2}:\d{2}\s*[AP]M",labels[1],re.I): continue
     if "Field" not in labels[5]: continue
     def team_and_score(cell):
         pieces=[p.get_text(" ",strip=True) for p in cell.find_all("p",recursive=False)]
         if pieces:
             name=pieces[0]
-            score=int(pieces[1]) if len(pieces)>1 and re.fullmatch(r"\\d{1,2}",pieces[1]) else None
+            score=int(pieces[1]) if len(pieces)>1 and re.fullmatch(r"\d{1,2}",pieces[1]) else None
             return name,score
         return cell.get_text(" ",strip=True),None
     home,hs=team_and_score(cells[3])
@@ -41,7 +41,7 @@ for tr in grid.select("tr"):
     expected=known[num]
     # Later rounds can show resolved winners instead of placeholders.
     def expected_name(label):
-        m=re.fullmatch(r"G(\\d+) Winner",label)
+        m=re.fullmatch(r"G(\d+) Winner",label)
         return updates.get(m.group(1),{}).get("winner") or existing["games"].get(m.group(1),{}).get("winner") or label if m else label
     if home!=expected_name(expected[0]) or away!=expected_name(expected[1]):
         raise RuntimeError(f"Unexpected participants in G{num}: {home} vs {away}")
