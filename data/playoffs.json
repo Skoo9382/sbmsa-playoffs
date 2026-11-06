@@ -57,12 +57,22 @@
     "7": {
       "date": "Thu 11/5",
       "time": "5:30 PM",
-      "field": "PSE Field #4"
+      "field": "PSE Field #4",
+      "score": [
+        0,
+        1
+      ],
+      "winner": "Tigers"
     },
     "8": {
       "date": "Thu 11/5",
       "time": "6:45 PM",
-      "field": "PSE Field #4"
+      "field": "PSE Field #4",
+      "score": [
+        1,
+        0
+      ],
+      "winner": "Argentina FC"
     },
     "9": {
       "date": "Tue 11/10",
@@ -80,6 +90,6 @@
       "field": "SBEC 6U Field"
     }
   },
-  "checked_at": "2026-11-05T15:22:00Z",
+  "checked_at": "2026-11-06",
   "source": "https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs"
 }
