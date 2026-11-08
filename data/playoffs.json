@@ -47,7 +47,12 @@
     "5": {
       "date": "Fri 11/6",
       "time": "5:45 PM",
-      "field": "PSE Field #2"
+      "field": "PSE Field #2",
+      "score": [
+        0,
+        7
+      ],
+      "winner": "Rams"
     },
     "6": {
       "date": "Mon 11/9",
@@ -90,6 +95,6 @@
       "field": "SBEC 6U Field"
     }
   },
-  "checked_at": "2026-11-06",
+  "checked_at": "2026-11-07",
   "source": "https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs"
 }
