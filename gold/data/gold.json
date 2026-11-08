@@ -1,6 +1,6 @@
 {
   "source": "https://sbmsa.net/schedule/710226/6u-boys-gold-playoffs",
-  "checked_at": "2026-11-06",
+  "checked_at": "2026-11-07",
   "games": [
     {
       "date": "10/31",
@@ -73,7 +73,10 @@
       "time": "5:45 PM",
       "home": "Celtics",
       "away": "Bulls FC",
-      "score": null,
+      "score": [
+        3,
+        1
+      ],
       "field": "PSE Field #1"
     },
     {
@@ -81,7 +84,10 @@
       "time": "5:45 PM",
       "home": "Liverpool",
       "away": "Red Fury",
-      "score": null,
+      "score": [
+        3,
+        3
+      ],
       "field": "PSE Field #4"
     },
     {
@@ -133,7 +139,10 @@
       "time": "8:30 AM",
       "home": "Celtics",
       "away": "Liverpool",
-      "score": null,
+      "score": [
+        7,
+        1
+      ],
       "field": "PSE Field #1"
     },
     {
@@ -141,7 +150,10 @@
       "time": "8:30 AM",
       "home": "Bulls FC",
       "away": "Red Fury",
-      "score": null,
+      "score": [
+        5,
+        3
+      ],
       "field": "PSE Field #4"
     },
     {
@@ -149,7 +161,10 @@
       "time": "9:45 AM",
       "home": "Green Army",
       "away": "England Lions",
-      "score": null,
+      "score": [
+        1,
+        3
+      ],
       "field": "PSE Field #1"
     },
     {
@@ -157,7 +172,10 @@
       "time": "9:45 AM",
       "home": "Cannonballs",
       "away": "Vipers",
-      "score": null,
+      "score": [
+        1,
+        1
+      ],
       "field": "PSE Field #4"
     },
     {
@@ -165,7 +183,10 @@
       "time": "11:00 AM",
       "home": "Speedy Yetis",
       "away": "Bayern Eagles",
-      "score": null,
+      "score": [
+        4,
+        1
+      ],
       "field": "SBE 6U #4"
     },
     {
@@ -173,7 +194,10 @@
       "time": "11:00 AM",
       "home": "Barcelona",
       "away": "New York Knights",
-      "score": null,
+      "score": [
+        3,
+        4
+      ],
       "field": "SWMS - 6U"
     }
   ],
@@ -182,23 +206,23 @@
       "id": 1,
       "date": "11/9",
       "time": "5:30 PM",
-      "home": "TBD",
-      "away": "TBD",
+      "home": "Celtics",
+      "away": "Cannonballs",
       "field": "PSE Field #1"
     },
     {
       "id": 2,
       "date": "11/9",
       "time": "6:45 PM",
-      "home": "TBD",
-      "away": "TBD",
+      "home": "Bulls FC",
+      "away": "New York Knights",
       "field": "PSE Field #1"
     },
     {
       "id": 3,
       "date": "11/11",
       "time": "5:30 PM",
-      "home": "TBD",
+      "home": "England Lions",
       "away": "G1 Winner",
       "field": "PSE Field #1"
     },
@@ -206,7 +230,7 @@
       "id": 4,
       "date": "11/11",
       "time": "6:45 PM",
-      "home": "TBD",
+      "home": "Speedy Yetis",
       "away": "G2 Winner",
       "field": "PSE Field #1"
     },
@@ -222,104 +246,104 @@
   "pools": {
     "A": [
       {
-        "name": "Bulls FC",
-        "w": 1,
-        "l": 0,
+        "name": "Celtics",
+        "w": 2,
+        "l": 1,
         "t": 0,
-        "gf": 6,
-        "ga": 2
+        "gf": 10,
+        "ga": 3
+      },
+      {
+        "name": "Bulls FC",
+        "w": 2,
+        "l": 1,
+        "t": 0,
+        "gf": 12,
+        "ga": 8
       },
       {
         "name": "Red Fury",
         "w": 1,
-        "l": 0,
-        "t": 0,
-        "gf": 1,
-        "ga": 0
+        "l": 1,
+        "t": 1,
+        "gf": 7,
+        "ga": 8
       },
       {
         "name": "Liverpool",
         "w": 0,
-        "l": 1,
-        "t": 0,
-        "gf": 2,
-        "ga": 6
-      },
-      {
-        "name": "Celtics",
-        "w": 0,
-        "l": 1,
-        "t": 0,
-        "gf": 0,
-        "ga": 1
+        "l": 2,
+        "t": 1,
+        "gf": 6,
+        "ga": 16
       }
     ],
     "B": [
       {
         "name": "England Lions",
-        "w": 1,
+        "w": 2,
         "l": 0,
         "t": 1,
-        "gf": 7,
-        "ga": 6
+        "gf": 10,
+        "ga": 7
       },
       {
         "name": "Cannonballs",
         "w": 1,
         "l": 1,
-        "t": 0,
-        "gf": 6,
-        "ga": 5
+        "t": 1,
+        "gf": 7,
+        "ga": 6
       },
       {
         "name": "Green Army",
         "w": 1,
-        "l": 1,
+        "l": 2,
         "t": 0,
-        "gf": 5,
-        "ga": 3
+        "gf": 6,
+        "ga": 6
       },
       {
         "name": "Vipers",
         "w": 0,
         "l": 1,
-        "t": 1,
-        "gf": 3,
-        "ga": 7
+        "t": 2,
+        "gf": 4,
+        "ga": 8
       }
     ],
     "C": [
       {
+        "name": "Speedy Yetis",
+        "w": 2,
+        "l": 1,
+        "t": 0,
+        "gf": 8,
+        "ga": 4
+      },
+      {
         "name": "Barcelona",
         "w": 1,
-        "l": 0,
+        "l": 1,
         "t": 1,
-        "gf": 4,
-        "ga": 3
+        "gf": 7,
+        "ga": 7
+      },
+      {
+        "name": "New York Knights",
+        "w": 1,
+        "l": 1,
+        "t": 1,
+        "gf": 8,
+        "ga": 9
       },
       {
         "name": "Bayern Eagles",
         "w": 0,
-        "l": 0,
+        "l": 1,
         "t": 2,
-        "gf": 5,
-        "ga": 5
-      },
-      {
-        "name": "Speedy Yetis",
-        "w": 1,
-        "l": 1,
-        "t": 0,
-        "gf": 4,
-        "ga": 3
-      },
-      {
-        "name": "New York Knights",
-        "w": 0,
-        "l": 1,
-        "t": 1,
-        "gf": 4,
-        "ga": 6
+        "gf": 6,
+        "ga": 9
       }
     ]
   },
