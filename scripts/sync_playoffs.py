@@ -35,7 +35,12 @@ for tr in grid.select("tr"):
             name=pieces[0]
             score=int(pieces[1]) if len(pieces)>1 and re.fullmatch(r"\d{1,2}",pieces[1]) else None
             return name,score
-        return cell.get_text(" ",strip=True),None
+        raw=cell.get_text(" ",strip=True)
+        # Some official rows render scores inline, e.g. "Rams 3".
+        inline=re.fullmatch(r"(.+?)\s+(\d{1,2})",raw)
+        if inline:
+            return inline.group(1).strip(),int(inline.group(2))
+        return raw,None
     home,hs=team_and_score(cells[3])
     away,aw=team_and_score(cells[4])
     expected=known[num]
