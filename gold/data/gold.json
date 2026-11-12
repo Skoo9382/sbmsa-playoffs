@@ -1,6 +1,6 @@
 {
   "source": "https://sbmsa.net/schedule/710226/6u-boys-gold-playoffs",
-  "checked_at": "2026-11-07",
+  "checked_at": "2026-11-12",
   "games": [
     {
       "date": "10/31",
@@ -208,7 +208,12 @@
       "time": "5:30 PM",
       "home": "Celtics",
       "away": "Cannonballs",
-      "field": "PSE Field #1"
+      "field": "PSE Field #1",
+      "score": [
+        2,
+        1
+      ],
+      "winner": "Celtics"
     },
     {
       "id": 2,
@@ -216,30 +221,45 @@
       "time": "6:45 PM",
       "home": "Bulls FC",
       "away": "New York Knights",
-      "field": "PSE Field #1"
+      "field": "PSE Field #1",
+      "score": [
+        5,
+        2
+      ],
+      "winner": "Bulls FC"
     },
     {
       "id": 3,
       "date": "11/11",
       "time": "5:30 PM",
       "home": "England Lions",
-      "away": "G1 Winner",
-      "field": "PSE Field #1"
+      "away": "Celtics",
+      "field": "PSE Field #1",
+      "score": [
+        3,
+        1
+      ],
+      "winner": "England Lions"
     },
     {
       "id": 4,
       "date": "11/11",
       "time": "6:45 PM",
       "home": "Speedy Yetis",
-      "away": "G2 Winner",
-      "field": "PSE Field #1"
+      "away": "Bulls FC",
+      "field": "PSE Field #1",
+      "score": [
+        1,
+        4
+      ],
+      "winner": "Bulls FC"
     },
     {
       "id": 5,
       "date": "11/14",
       "time": "3:30 PM",
-      "home": "G3 Winner",
-      "away": "G4 Winner",
+      "home": "England Lions",
+      "away": "Bulls FC",
       "field": "SBEC 6U Field"
     }
   ],
