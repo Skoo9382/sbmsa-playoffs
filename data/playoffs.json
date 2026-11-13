@@ -87,7 +87,12 @@
     "9": {
       "date": "Thu 11/12",
       "time": "5:30 PM",
-      "field": "PSE Field #4"
+      "field": "PSE Field #4",
+      "score": [
+        2,
+        4
+      ],
+      "winner": "Kinkaid Falcons"
     },
     "10": {
       "date": "Thu 11/12",
@@ -105,6 +110,6 @@
       "field": "SBEC 6U Field"
     }
   },
-  "checked_at": "2026-11-13T17:09:48.891949+00:00",
+  "checked_at": "2026-11-13T18:01:33.944869+00:00",
   "source": "https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs"
 }
