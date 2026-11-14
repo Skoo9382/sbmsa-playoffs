@@ -107,9 +107,14 @@
     "11": {
       "date": "Sat 11/14",
       "time": "1:30 PM",
-      "field": "SBEC 6U Field"
+      "field": "SBEC 6U Field",
+      "score": [
+        0,
+        1
+      ],
+      "winner": "Argentina FC"
     }
   },
-  "checked_at": "2026-11-14T21:19:45.910219+00:00",
+  "checked_at": "2026-11-14T22:19:02.346560+00:00",
   "source": "https://sbmsa.net/schedule/710227/6u-boys-silver-playoffs"
 }
